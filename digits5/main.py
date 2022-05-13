@@ -61,7 +61,7 @@ if __name__ == '__main__':
     r2 = [sum((gauss_method(matrix, right_side, iter_count) - np_solution) ** 2) / len(np_solution) for iter_count in
           range(1, n)]
     ax.plot(range(1, n), np.abs(r2), 'r')
-    ax.set(xlabel='n', ylabel='eps', title='')
+    ax.set(xlabel='iter_count', ylabel='eps', title='')
     ax.set_yscale('log')
     ax.grid()
     plt.show()
