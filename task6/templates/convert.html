@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Convert</title>
+</head>
+<style>
+    .input__block {
+        text-align: center;
+        padding: 5px 10px 15px 10px;
+        border: 2px solid black;
+        border-radius: 10px;
+    }
+    input {
+        border: 2px solid black;
+        border-radius: 5px;
+        background-color: white;
+        font-size: 14px;
+    }
+    {% if image_path %}
+        table {
+            border: 0;
+            font-size: {{ 750 / width }}px;
+            letter-spacing: 0;
+            border-spacing: 0;
+            border-collapse: collapse;
+        }
+        tr {
+            margin: 0 0 0 0;
+            padding: 0 0 0 0;
+            width: {{ 1000 / width - 1}}px;
+            height: {{ 1000 / width - 1 }}px;
+        }
+        td {
+            margin: 0 0 0 0;
+            padding: 0 0 0 0;
+            width: {{ 1000 / width - 1 }}px;
+            height: {{ 1000 / width - 1}}px;
+            text-align: center;
+            vertical-align: center;
+        }
+        td:not(.table__main) {
+
+        }
+        img {
+            width: 1000px;
+            height: {{ height * 1000 / width }}px;
+            image-rendering: pixelated;
+        }
+        .dataframe__bottom {
+            width: 1000px;
+        }
+        .dataframe__left {
+            height: {{ height * 1000 / width }}px;
+        }
+    {% endif %}
+</style>
+<body>
+{% include '_menu.html' %}
+<div class='input__block'>
+    <h2>Converter</h2>
+    <form method="post" action="" enctype="multipart/form-data">
+        <p><input name="width" placeholder="Width"></p>
+        <p><input name="monochrome" placeholder="Monochrome"></p>
+        <p>Upload black-white image:
+        <p><input type="file" name="image_to_convert" accept="image/*"></p>
+        </p>
+        <input class='cards__button' name="submit" type="submit" value="Convert">
+    </form>
+</div>
+{% if image_path %}
+{% autoescape off %}
+<div class=''>
+    <table>
+        <tr>
+            <td class='table__main'>{{ table_left }}</td>
+            <td class='table__main'><img src="{{ image_path }}" alt="Converted Image"></td>
+        </tr>
+        <tr>
+            <td class='table__main'></td>
+            <td class='table__main'>{{ table_bottom }}</td>
+        </tr>
+    </table>
+</div>
+{% endautoescape %}
+{% endif %}
+</body>
+</html>
