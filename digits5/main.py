@@ -15,8 +15,8 @@ def read_matrix(filename):
     return matrix, right_side
 
 
-def jacobi_method(matrix, right_side, iterations_count):
-    if not(check_diag_dominance(matrix)):
+def jacobi_method(matrix, right_side, iterations_count, print_error: bool = True):
+    if print_error and not(check_diag_dominance(matrix)):
         sys.stderr.write("There is no diagonal dominance in matrix. Result may be not right.\n")
     b = [[-matrix[row][col] / matrix[row][row] if row != col else 0 for col in range(len(right_side))] for row in
          range(len(right_side))]
@@ -27,8 +27,8 @@ def jacobi_method(matrix, right_side, iterations_count):
     return curr_x
 
 
-def gauss_method(matrix, right_side, iterations_count):
-    if not(check_diag_dominance(matrix)):
+def gauss_method(matrix, right_side, iterations_count, print_error: bool = True):
+    if print_error and not(check_diag_dominance(matrix)):
         sys.stderr.write("There is no diagonal dominance in matrix. Result may be not right.\n")
     b = [[-matrix[row][col] / matrix[row][row] if row != col else 0 for col in range(len(right_side))] for row in
          range(len(right_side))]
@@ -45,24 +45,22 @@ def check_diag_dominance(matrix):
 
 
 if __name__ == '__main__':
-    matrix, right_side = read_matrix('input2.txt')
+    matrix, right_side = read_matrix('input1 .txt')
     np_solution = np.linalg.solve(matrix, right_side)
+    print(np_solution)
     jacobi = jacobi_method(matrix, right_side, 5)
     gauss = gauss_method(matrix, right_side, 5)
-    print("numpy: " + str(np_solution))
-    print("jacobi: " + str(jacobi))
-    print("gauss: " + str(gauss))
-
     fig, ax = plt.subplots()
     n = 50
-    r1 = [sum((jacobi_method(matrix, right_side, iter_count) - np_solution) ** 2) / len(np_solution) for iter_count in
+    r1 = [sum((jacobi_method(matrix, right_side, iter_count, print_error=False) - np_solution) ** 2) / len(np_solution) for iter_count in
           range(1, n)]
-    ax.plot(range(1, n), np.abs(r1), 'b')
-    r2 = [sum((gauss_method(matrix, right_side, iter_count) - np_solution) ** 2) / len(np_solution) for iter_count in
+    ax.plot(range(1, n), np.abs(r1), 'b', label='jacobi')
+    r2 = [sum((gauss_method(matrix, right_side, iter_count, print_error=False) - np_solution) ** 2) / len(np_solution) for iter_count in
           range(1, n)]
-    ax.plot(range(1, n), np.abs(r2), 'r')
+    ax.plot(range(1, n), np.abs(r2), 'r', label='gauss')
     ax.set(xlabel='iter_count', ylabel='eps', title='')
     ax.set_yscale('log')
+    ax.legend()
     ax.grid()
     plt.show()
 
